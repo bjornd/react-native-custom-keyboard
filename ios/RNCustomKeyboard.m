@@ -11,6 +11,7 @@
 {
     return dispatch_get_main_queue();
 }
+
 RCT_EXPORT_MODULE(CustomKeyboard)
 
 RCT_EXPORT_METHOD(install:(nonnull NSNumber *)reactTag withType:(nonnull NSString *)keyboardType)
@@ -22,9 +23,12 @@ RCT_EXPORT_METHOD(install:(nonnull NSNumber *)reactTag withType:(nonnull NSStrin
     }
   ];
 
-  UITextView *view = (UITextView*)[_bridge.uiManager viewForReactTag:reactTag];
+  NSInteger SCREEN_WIDTH = [UIScreen mainScreen].bounds.size.width;
+  NSInteger SCREEN_HEIGHT = [UIScreen mainScreen].bounds.size.height;
+  inputView.frame = CGRectMake(0, SCREEN_HEIGHT - 216, SCREEN_WIDTH, 216);
 
-  view.inputView = inputView;
+  UITextView *view = (UITextView*)[_bridge.uiManager viewForReactTag:reactTag];
+  ((UITextField *)[view valueForKey:@"_backedTextInput"]).inputView = inputView;
   [view reloadInputViews];
 }
 
@@ -68,9 +72,9 @@ RCT_EXPORT_METHOD(moveLeft:(nonnull NSNumber *)reactTag) {
   UITextRange* range = view.selectedTextRange;
   UITextPosition* position = range.start;
 
-  if ([view comparePosition:range.start toPosition:range.end] == 0) {
+  /*if ([view comparePosition:range.start toPosition:range.end] == 0) {
     position = [view positionFromPosition: position, offset: -1];
-  }
+  }*/
 
   view.selectedTextRange = [view textRangeFromPosition: position toPosition:position];
 }
@@ -81,20 +85,19 @@ RCT_EXPORT_METHOD(moveRight:(nonnull NSNumber *)reactTag) {
   UITextRange* range = view.selectedTextRange;
   UITextPosition* position = range.end;
 
-  if ([view comparePosition:range.start toPosition:range.end] == 0) {
+  /*if ([view comparePosition:range.start toPosition:range.end] == 0) {
     position = [view positionFromPosition: position, offset: 1];
-  }
+  }*/
 
   view.selectedTextRange = [view textRangeFromPosition: position toPosition:position];
 }
 
 RCT_EXPORT_METHOD(switchSystemKeyboard:(nonnull NSNumber*) reactTag) {
-  UITextView *view = [_bridge.uiManager viewForReactTag:reactTag];
+  /*UITextView *view = [_bridge.uiManager viewForReactTag:reactTag];
   UIView* inputView = view.inputView;
   view.inputView = nil;
   [view reloadInputViews];
-  view.inputView = inputView;
+  view.inputView = inputView;*/
 }
 
 @end
-  
